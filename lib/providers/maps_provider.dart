@@ -65,6 +65,7 @@ class MapsProvider with ChangeNotifier {
 
   getAfetzedeList(context) {
     afetzedeList.clear();
+    markers.clear();
     http.post(Uri.parse('$BASE_URL/pins'), headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
