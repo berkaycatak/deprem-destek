@@ -36,6 +36,23 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MapsProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        backgroundColor: Colors.red,
+        title: Text("Deprem Yardım"),
+        actions: [
+          InkWell(
+            onTap: () => context.read<MapsProvider>().getAfetzedeList(context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20,
+              ),
+              child: Icon(Icons.refresh),
+            ),
+          )
+        ],
+      ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     _buildAddPinModal(context);
