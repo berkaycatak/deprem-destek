@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:deprem_destek/components/bottom_sheet/bottom_sheet.dart';
 import 'package:deprem_destek/models/afetzede_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,14 +24,22 @@ class MapsProvider with ChangeNotifier {
 
   List<Marker> markers = <Marker>[];
 
-  _markerAdd(id, lat, lng) {
-    markers.add(Marker(
-      markerId: MarkerId(id.toString()),
-      position: LatLng(lat, lng),
-      // infoWindow: InfoWindow(
-      // title: 'The title of the marker'
-      // )
-    ));
+  _markerAdd(BuildContext context,
+      AfetzedeLocationListModel afetzedeLocationListModel) {
+    markers.add(
+      Marker(
+        markerId: MarkerId(afetzedeLocationListModel.id.toString()),
+        position: LatLng(
+            afetzedeLocationListModel.lat!, afetzedeLocationListModel.lng!),
+        onTap: () {
+          buildBottomSheet(
+            context,
+            title: "Afetzede Bilgileri",
+            child: afetzedeDetail(context, afetzedeLocationListModel),
+          );
+        },
+      ),
+    );
     notifyListeners();
   }
 
@@ -61,8 +70,10 @@ class MapsProvider with ChangeNotifier {
     }).then((value) {
       print(value.body);
       for (var element in jsonDecode(value.body) as List) {
-        afetzedeList.add(AfetzedeLocationListModel.fromJson(element));
-        _markerAdd(element['id'], element['lat'], element['lng']);
+        AfetzedeLocationListModel afetzedeLocationListModel =
+            AfetzedeLocationListModel.fromJson(element);
+        afetzedeList.add(afetzedeLocationListModel);
+        _markerAdd(context, afetzedeLocationListModel);
       }
       notifyListeners();
     });
@@ -90,5 +101,60 @@ class MapsProvider with ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+  Widget afetzedeDetail(BuildContext context,
+      AfetzedeLocationListModel afetzedeLocationListModel) {
+    return Column(
+      children: [
+        ListTile(
+          title: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Ad Soyad',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          subtitle: Text(afetzedeLocationListModel.nameSurname!),
+        ),
+        ListTile(
+          title: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Telefon Numarası',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          subtitle: Text(afetzedeLocationListModel.phoneNumber!),
+        ),
+        ListTile(
+          title: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Afetzede',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          subtitle: Text(
+            afetzedeLocationListModel.who == 1
+                ? "Ben enkazdayım!"
+                : "Tanıdığım kişi enkazda.",
+          ),
+        ),
+        ListTile(
+          title: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Detaylar',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          subtitle: Text(afetzedeLocationListModel.description!),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+      ],
+    );
   }
 }
