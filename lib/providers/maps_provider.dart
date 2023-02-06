@@ -36,7 +36,9 @@ class MapsProvider with ChangeNotifier {
   }
 
   getCurrentPosition() async {
-    await Permission.location.request();
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
+
     Position position = await Geolocator.getCurrentPosition();
     currentLat = position.latitude;
     currentLng = position.longitude;

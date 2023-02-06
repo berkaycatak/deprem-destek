@@ -49,24 +49,23 @@ class MapScreenState extends State<MapScreen> {
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
             )
-          : SafeArea(
-              child: GoogleMap(
-                onTap: (argument) {
-                  selectedLat = argument.latitude;
-                  selectedLng = argument.longitude;
-                  _buildAddPinModal(context, selectedLat, selectedLng);
-                },
-                markers: Set<Marker>.of(provider.markers),
-                zoomControlsEnabled: false,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                mapType: MapType.normal,
-                buildingsEnabled: true,
-                initialCameraPosition: provider.currentPosition!,
-                onMapCreated: (GoogleMapController controller) {
-                  provider.mapController.complete(controller);
-                },
-              ),
+          : GoogleMap(
+              padding: const EdgeInsets.all(14),
+              onTap: (argument) {
+                selectedLat = argument.latitude;
+                selectedLng = argument.longitude;
+                _buildAddPinModal(context, selectedLat, selectedLng);
+              },
+              markers: Set<Marker>.of(provider.markers),
+              zoomControlsEnabled: false,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              mapType: MapType.normal,
+              buildingsEnabled: true,
+              initialCameraPosition: provider.currentPosition!,
+              onMapCreated: (GoogleMapController controller) {
+                provider.mapController.complete(controller);
+              },
             ),
     );
   }
@@ -89,19 +88,32 @@ class MapScreenState extends State<MapScreen> {
                     topRight: Radius.circular(30))),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(
                     height: 15,
                   ),
-                  const Text(
-                    'Enkaz altında bildirim formu',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Enkaz altında bildirim formu',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        InkWell(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: Icon(Icons.close)),
+                      ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  Divider(),
                   ListTile(
                     title: const Padding(
                       padding: EdgeInsets.only(bottom: 8.0),
@@ -127,17 +139,23 @@ class MapScreenState extends State<MapScreen> {
                       ),
                       subtitle: Column(
                         children: [
+                          SizedBox(height: 10),
                           Row(
                             children: [
-                              Checkbox(
-                                value: isAfetzede,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isAfetzede = true;
-                                    isNotAfetzede = false;
-                                  });
-                                },
+                              SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: Checkbox(
+                                  value: isAfetzede,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isAfetzede = true;
+                                      isNotAfetzede = false;
+                                    });
+                                  },
+                                ),
                               ),
+                              const SizedBox(width: 10),
                               const Text(
                                 'Ben',
                                 style: TextStyle(
@@ -146,17 +164,23 @@ class MapScreenState extends State<MapScreen> {
                               )
                             ],
                           ),
+                          SizedBox(height: 5),
                           Row(
                             children: [
-                              Checkbox(
-                                value: isNotAfetzede,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isNotAfetzede = true;
-                                    isAfetzede = false;
-                                  });
-                                },
+                              SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: Checkbox(
+                                  value: isNotAfetzede,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isNotAfetzede = true;
+                                      isAfetzede = false;
+                                    });
+                                  },
+                                ),
                               ),
+                              const SizedBox(width: 10),
                               const Text(
                                 'Bir yakınım',
                                 style: TextStyle(
@@ -182,8 +206,9 @@ class MapScreenState extends State<MapScreen> {
                       controller: phoneNumberController,
                       focusNode: phoneFocusNode,
                       keyboardType: TextInputType.phone,
-                      decoration:
-                          const InputDecoration(border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -281,7 +306,7 @@ class MapScreenState extends State<MapScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                 ],
               ),
