@@ -1,18 +1,34 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MapsProvider with ChangeNotifier {
-  final Completer<GoogleMapController> _controller =
+  var currentLat;
+  var currentLng;
+  Position? currentPosition;
+
+  final Completer<GoogleMapController> mapController =
       Completer<GoogleMapController>();
 
-  CameraPosition? _kGooglePlex;
+  CameraPosition? kGooglePlex;
 
-  void init() async {
-    _kGooglePlex = const CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962),
-      zoom: 14.4746,
+  getCurrentPosition() async {
+    await Permission.location.request();
+    currentPosition = await Geolocator.getCurrentPosition();
+    currentLat = currentPosition!.latitude;
+    currentLng = currentPosition!.longitude;
+    notifyListeners();
+    init();
+  }
+
+  init() async {
+    kGooglePlex = CameraPosition(
+      target: LatLng(currentLat, currentLng),
+      zoom: 25,
     );
+    notifyListeners();
   }
 }
