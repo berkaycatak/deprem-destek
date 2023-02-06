@@ -5,7 +5,6 @@ import 'package:deprem_destek/models/afetzede_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 
 class MapsProvider with ChangeNotifier {
@@ -86,7 +85,9 @@ class MapsProvider with ChangeNotifier {
             }))
         .then((value) {
       print(value.body);
+
       getAfetzedeList(context);
+
       notifyListeners();
     });
   }
