@@ -40,12 +40,12 @@ class MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: Colors.red,
-        title: Text("Deprem Yardım"),
+        title: const Text("Deprem Yardım"),
         actions: [
           InkWell(
             onTap: () => context.read<MapsProvider>().getAfetzedeList(context),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
                 vertical: 10.0,
                 horizontal: 20,
               ),
@@ -54,15 +54,6 @@ class MapScreenState extends State<MapScreen> {
           )
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     _buildAddPinModal(context);
-      //   },
-      //   child: const Icon(
-      //     Icons.add_location_alt_rounded,
-      //     color: Colors.white,
-      //   ),
-      // ),
       body: provider.currentPosition == null
           ? const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -305,6 +296,9 @@ class MapScreenState extends State<MapScreen> {
                         phoneNumberController.clear();
                         descriptionController.clear();
                         Navigator.of(context).pop();
+                        buildBottomSheet(context,
+                            title: "Bilgileriniz Başarıyla Kaydedildi",
+                            child: _successWidget());
                       }
                     },
                     child: Container(
@@ -342,9 +336,6 @@ class MapScreenState extends State<MapScreen> {
         isNotAfetzede = false;
         phoneNumberController.clear();
         descriptionController.clear();
-        buildBottomSheet(context,
-            title: "Bilgileriniz Başarıyla Kaydedildi",
-            child: _successWidget());
       },
     );
   }
