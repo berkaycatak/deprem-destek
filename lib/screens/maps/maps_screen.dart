@@ -1,3 +1,4 @@
+import 'package:deprem_destek/components/bottom_sheet/bottom_sheet.dart';
 import 'package:deprem_destek/providers/maps_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -332,67 +333,59 @@ class MapScreenState extends State<MapScreen> {
           ),
         );
       }),
-    ).then((value) {
-      nameController.clear();
-      selectedLat = null;
-      selectedLng = null;
-      isAfetzede = false;
-      isNotAfetzede = false;
-      phoneNumberController.clear();
-      descriptionController.clear();
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          // height: 300,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 15),
-              const Text(
-                'Bilgileriniz Veritabanına Gönderildi',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                child: const Icon(
-                  Icons.check,
-                  size: 50,
-                  color: Colors.blue,
-                ),
-              ),
-              const SizedBox(height: 15),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  height: 50,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.blue,
-                  ),
-                  child: const Center(
-                      child: Text(
-                    'Tamam',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  )),
-                ),
-              ),
-            ],
+    ).then(
+      (value) {
+        nameController.clear();
+        selectedLat = null;
+        selectedLng = null;
+        isAfetzede = false;
+        isNotAfetzede = false;
+        phoneNumberController.clear();
+        descriptionController.clear();
+        buildBottomSheet(context,
+            title: "Bilgileriniz Başarıyla Kaydedildi",
+            child: _successWidget());
+      },
+    );
+  }
+
+  Widget _successWidget() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 15),
+        Container(
+          child: const Icon(
+            Icons.check,
+            size: 50,
+            color: Colors.blue,
           ),
         ),
-      );
-    });
+        const SizedBox(height: 15),
+        InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            height: 50,
+            margin: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.blue,
+            ),
+            child: const Center(
+              child: Text(
+                'Kapat',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 25),
+      ],
+    );
   }
 }
