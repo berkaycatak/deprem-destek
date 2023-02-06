@@ -43,7 +43,13 @@ class MapScreenState extends State<MapScreen> {
         title: const Text("Deprem Yardım"),
         actions: [
           InkWell(
-            onTap: () => context.read<MapsProvider>().getAfetzedeList(context),
+            onTap: () {
+              setState(() {
+                context.read<MapsProvider>().afetzedeList.clear();
+                context.read<MapsProvider>().markers.clear();
+              });
+              context.read<MapsProvider>().getAfetzedeList(context);
+            },
             child: const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 10.0,
