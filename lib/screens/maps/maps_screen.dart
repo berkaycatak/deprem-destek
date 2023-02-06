@@ -39,12 +39,12 @@ class MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: Colors.red,
-        title: Text("Deprem Yardım"),
+        title: const Text("Deprem Yardım"),
         actions: [
           InkWell(
             onTap: () => context.read<MapsProvider>().getAfetzedeList(context),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
                 vertical: 10.0,
                 horizontal: 20,
               ),
@@ -304,6 +304,63 @@ class MapScreenState extends State<MapScreen> {
                         phoneNumberController.clear();
                         descriptionController.clear();
                         Navigator.of(context).pop();
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                            // height: 300,
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30))),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 15),
+                                const Text(
+                                  'Bilgileriniz Veritabanına Gönderildi',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 15),
+                                Container(
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 50,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal:
+                                            MediaQuery.of(context).size.width *
+                                                0.04),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: Colors.blue,
+                                    ),
+                                    child: const Center(
+                                        child: Text(
+                                      'Tamam',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    )),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -340,59 +397,6 @@ class MapScreenState extends State<MapScreen> {
       isNotAfetzede = false;
       phoneNumberController.clear();
       descriptionController.clear();
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          // height: 300,
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 15),
-              const Text(
-                'Bilgileriniz Veritabanına Gönderildi',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                child: const Icon(
-                  Icons.check,
-                  size: 50,
-                  color: Colors.blue,
-                ),
-              ),
-              const SizedBox(height: 15),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  height: 50,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.blue,
-                  ),
-                  child: const Center(
-                      child: Text(
-                    'Tamam',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  )),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
     });
   }
 }
