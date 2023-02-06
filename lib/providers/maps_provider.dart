@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class MapsProvider with ChangeNotifier {
   String BASE_URL = 'https://deprem.medialyra.com/api';
@@ -103,6 +104,21 @@ class MapsProvider with ChangeNotifier {
     });
   }
 
+  afetzedeStatus(context, AfetzedeLocationListModel afetzedeLocationListModel) {
+    http
+        .post(Uri.parse('$BASE_URL/pins/edit/status'),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: jsonEncode(
+                {'id': afetzedeLocationListModel.id.toString(), 'status': "1"}))
+        .then((value) {
+      getAfetzedeList(context);
+      notifyListeners();
+    });
+  }
+
   Widget afetzedeDetail(BuildContext context,
       AfetzedeLocationListModel afetzedeLocationListModel) {
     return Column(
@@ -150,6 +166,81 @@ class MapsProvider with ChangeNotifier {
             ),
           ),
           subtitle: Text(afetzedeLocationListModel.description!),
+        ),
+        InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                content: const SizedBox(
+                  height: 50,
+                  child: Text(
+                    'Kurtarıldı olarak işaretlemek istediğinize emin misiniz?',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                actions: [
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(true),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Text(
+                        'Onayla',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(false),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Text(
+                        'Vazgeç',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ).then((value) {
+              if (value != null) {
+                if (value) {
+                  context
+                      .read<MapsProvider>()
+                      .afetzedeStatus(context, afetzedeLocationListModel);
+                  Navigator.of(context).pop();
+                }
+              }
+            });
+          },
+          child: Container(
+            height: 50,
+            margin: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.04),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.green,
+            ),
+            child: const Center(
+                child: Text(
+              'KURTARILDI',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            )),
+          ),
         ),
         const SizedBox(
           height: 25,
