@@ -114,6 +114,7 @@ class MapsProvider with ChangeNotifier {
             body: jsonEncode(
                 {'id': afetzedeLocationListModel.id.toString(), 'status': "1"}))
         .then((value) {
+      print(value.body);
       getAfetzedeList(context);
       notifyListeners();
     });
