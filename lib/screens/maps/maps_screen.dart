@@ -1,5 +1,9 @@
 import 'package:deprem_destek/components/bottom_sheet/bottom_sheet.dart';
+import 'package:deprem_destek/components/screen/sub_screen_design.dart';
 import 'package:deprem_destek/providers/maps_provider.dart';
+import 'package:deprem_destek/screens/sub/about_screen.dart';
+import 'package:deprem_destek/screens/sub/contact_screen.dart';
+import 'package:deprem_destek/screens/sub/sss_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +41,62 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MapsProvider>(context);
     return Scaffold(
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              color: Colors.red,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 60,
+                  left: 14,
+                  bottom: 20,
+                ),
+                child: Text(
+                  "Deprem Yardım",
+                  style: TextStyle(
+                    fontSize: 19,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text('Hakkımızda'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AboutScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Nasıl Kullanılır?'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HowToUseScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('İletişim'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ContactScreen()));
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: Colors.red,

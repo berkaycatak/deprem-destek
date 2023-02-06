@@ -56,7 +56,7 @@ class MapsProvider with ChangeNotifier {
 
     currentPosition = CameraPosition(
       target: LatLng(currentLat, currentLng),
-      zoom: 25,
+      zoom: 17,
     );
   }
 
