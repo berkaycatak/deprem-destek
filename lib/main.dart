@@ -7,6 +7,8 @@ void main() {
   runApp(const MyApp());
 }
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Deprem Destek',
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,

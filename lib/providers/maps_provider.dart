@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:deprem_destek/components/bottom_sheet/bottom_sheet.dart';
+import 'package:deprem_destek/main.dart';
 import 'package:deprem_destek/models/afetzede_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -34,9 +35,10 @@ class MapsProvider with ChangeNotifier {
             afetzedeLocationListModel.lat!, afetzedeLocationListModel.lng!),
         onTap: () {
           buildBottomSheet(
-            context,
+            navigatorKey.currentState!.context,
             title: "Afetzede Bilgileri",
-            child: afetzedeDetail(context, afetzedeLocationListModel),
+            child: afetzedeDetail(
+                navigatorKey.currentState!.context, afetzedeLocationListModel),
           );
         },
       ),
