@@ -8,27 +8,25 @@ import 'package:permission_handler/permission_handler.dart';
 class MapsProvider with ChangeNotifier {
   var currentLat;
   var currentLng;
-  Position? currentPosition;
+  CameraPosition? currentPosition;
 
   final Completer<GoogleMapController> mapController =
       Completer<GoogleMapController>();
 
-  CameraPosition? kGooglePlex;
-
   getCurrentPosition() async {
     await Permission.location.request();
-    currentPosition = await Geolocator.getCurrentPosition();
-    currentLat = currentPosition!.latitude;
-    currentLng = currentPosition!.longitude;
-    notifyListeners();
-    init();
-  }
+    Position _position = await Geolocator.getCurrentPosition();
+    currentLat = _position.latitude;
+    currentLng = _position.longitude;
 
-  init() async {
-    kGooglePlex = CameraPosition(
+    currentPosition = CameraPosition(
       target: LatLng(currentLat, currentLng),
       zoom: 25,
     );
+  }
+
+  init() async {
+    await getCurrentPosition();
     notifyListeners();
   }
 }

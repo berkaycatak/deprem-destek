@@ -15,16 +15,16 @@ class MapScreenState extends State<MapScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<MapsProvider>().getCurrentPosition();
+    context.read<MapsProvider>().init();
   }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MapsProvider>(context);
     return Scaffold(
-      body: provider.kGooglePlex == null
+      body: provider.currentPosition == null
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             )
           : SafeArea(
               child: GoogleMap(
@@ -32,7 +32,7 @@ class MapScreenState extends State<MapScreen> {
                 myLocationButtonEnabled: true,
                 mapType: MapType.normal,
                 buildingsEnabled: true,
-                initialCameraPosition: provider.kGooglePlex!,
+                initialCameraPosition: provider.currentPosition!,
                 onMapCreated: (GoogleMapController controller) {
                   provider.mapController.complete(controller);
                 },
