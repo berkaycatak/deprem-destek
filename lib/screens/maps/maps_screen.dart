@@ -1,5 +1,8 @@
 import 'package:deprem_destek/components/bottom_sheet/bottom_sheet.dart';
 import 'package:deprem_destek/providers/maps_provider.dart';
+import 'package:deprem_destek/screens/sub/about_screen.dart';
+import 'package:deprem_destek/screens/sub/contact_screen.dart';
+import 'package:deprem_destek/screens/sub/sss_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +22,7 @@ class MapScreenState extends State<MapScreen> {
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode phoneFocusNode = FocusNode();
   final FocusNode descriptionFocusNode = FocusNode();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool? isAfetzede = false;
   bool? isNotAfetzede = false;
@@ -37,7 +41,17 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MapsProvider>(context);
     return Scaffold(
+      key: scaffoldKey,
+      drawer: const Drawerr(),
       appBar: AppBar(
+
+        leading: IconButton(
+          icon: const Icon(Icons.info_outlined),
+          onPressed: () {
+            scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+
         centerTitle: false,
         backgroundColor: Colors.red,
         title: const Text("Deprem Yardım"),
@@ -55,33 +69,34 @@ class MapScreenState extends State<MapScreen> {
                 vertical: 10.0,
                 horizontal: 20,
               ),
-              child: Icon(Icons.refresh),
+              child: Icon(Icons.refresh,size: 30),
             ),
           )
         ],
       ),
       body: provider.currentPosition == null
           ? const Center(
-              child: CircularProgressIndicator.adaptive(),
-            )
+        child: CircularProgressIndicator.adaptive(),
+      )
           : GoogleMap(
-              padding: const EdgeInsets.all(14),
-              onTap: (argument) {
-                selectedLat = argument.latitude;
-                selectedLng = argument.longitude;
-                _buildAddPinModal(context, selectedLat, selectedLng);
-              },
-              markers: Set<Marker>.of(provider.markers),
-              zoomControlsEnabled: false,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              mapType: MapType.normal,
-              buildingsEnabled: true,
-              initialCameraPosition: provider.currentPosition!,
-              onMapCreated: (GoogleMapController controller) {
-                provider.mapController.complete(controller);
-              },
-            ),
+        padding: const EdgeInsets.all(14),
+        onTap: (argument) {
+          selectedLat = argument.latitude;
+          selectedLng = argument.longitude;
+          _buildAddPinModal(context, selectedLat, selectedLng);
+        },
+        markers: Set<Marker>.of(provider.markers),
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        mapType: MapType.normal,
+        buildingsEnabled: true,
+        initialCameraPosition: provider.currentPosition!,
+        onMapCreated: (GoogleMapController controller) {
+          provider.mapController.complete(controller);
+        },
+      ),
+
     );
   }
 
@@ -141,7 +156,7 @@ class MapScreenState extends State<MapScreen> {
                       controller: nameController,
                       focusNode: nameFocusNode,
                       decoration:
-                          const InputDecoration(border: OutlineInputBorder()),
+                      const InputDecoration(border: OutlineInputBorder()),
                     ),
                   ),
                   const SizedBox(
@@ -243,7 +258,7 @@ class MapScreenState extends State<MapScreen> {
                       minLines: 5,
                       maxLines: 10,
                       decoration:
-                          const InputDecoration(border: OutlineInputBorder()),
+                      const InputDecoration(border: OutlineInputBorder()),
                     ),
                   ),
                   const SizedBox(
@@ -317,11 +332,11 @@ class MapScreenState extends State<MapScreen> {
                       ),
                       child: const Center(
                           child: Text(
-                        'Afetzede Bildirimini Tamamla',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      )),
+                            'Afetzede Bildirimini Tamamla',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )),
                     ),
                   ),
                   const SizedBox(
@@ -334,7 +349,7 @@ class MapScreenState extends State<MapScreen> {
         );
       }),
     ).then(
-      (value) {
+          (value) {
         nameController.clear();
         selectedLat = null;
         selectedLng = null;
@@ -383,6 +398,82 @@ class MapScreenState extends State<MapScreen> {
         ),
         const SizedBox(height: 25),
       ],
+    );
+  }
+}
+
+
+
+class Drawerr extends StatelessWidget {
+  const Drawerr({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+
+              decoration: const BoxDecoration(
+                color: Colors.red,
+              ),
+
+              child: Stack(
+
+                  children: const [
+                    Positioned(
+                      bottom: 8.0,
+                      left: 4.0,
+                      child: Text(
+                        'Bilgi',
+                        style: TextStyle(color: Colors.white, fontSize: 40),
+                      ),
+                    ),
+                  ]
+
+              ),
+
+            ),
+            ListTile(
+              leading: Icon(Icons.people_outline),
+              title: const Text('Hakkımızda'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AboutScreen(),
+                    )
+                );
+              },
+            ),
+            const Divider(color: Colors.grey),
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: const Text('İletişim'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ContactScreen(),
+                    )
+                );
+
+              },
+            ),
+            const Divider(color: Colors.grey),
+            ListTile(
+              leading: Icon(Icons.question_mark),
+              title: const Text('Sıkça Sorulan Sorular'),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const HowToUseScreen(),
+                    )
+                );
+              },
+            ),
+          ]
+      ),
     );
   }
 }
