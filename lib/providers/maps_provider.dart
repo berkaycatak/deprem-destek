@@ -72,7 +72,6 @@ class MapsProvider with ChangeNotifier {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }).then((value) {
-      print(value.body);
       for (var element in jsonDecode(value.body) as List) {
         AfetzedeLocationListModel afetzedeLocationListModel =
             AfetzedeLocationListModel.fromJson(element);
