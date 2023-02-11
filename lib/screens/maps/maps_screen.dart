@@ -42,7 +42,7 @@ class MapScreenState extends State<MapScreen> {
     var provider = Provider.of<MapsProvider>(context);
     return Scaffold(
       key: scaffoldKey,
-      drawer: const Drawerr(),
+      drawer: const drawer(),
       appBar: AppBar(
 
         leading: IconButton(
@@ -404,8 +404,8 @@ class MapScreenState extends State<MapScreen> {
 
 
 
-class Drawerr extends StatelessWidget {
-  const Drawerr({Key? key}) : super(key: key);
+class drawer extends StatelessWidget {
+  const drawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
